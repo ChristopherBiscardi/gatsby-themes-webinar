@@ -1,0 +1,706 @@
+import future from '@mdx-deck/themes/base'
+import highlight from '@mdx-deck/themes/syntax-highlighter-prism'
+import { TwitterTweetEmbed } from 'react-twitter-embed'
+import {FullScreenCode, Horizontal} from 'mdx-deck/layouts'
+import { Notes } from 'mdx-deck'
+
+export const themes = [
+  future,
+  {pre: {fontSize: '32px'}},
+  highlight
+]
+
+# Gatsby Themes
+## Better, Faster, Flexible-er
+
+---
+
+# What are Themes?
+
+<Notes>
+
+* Themes are a powerful new abstraction under development for Gatsby. They allow
+  a developer to package up a site as a standalone product for others to use.
+* In short: Themes are NPM installable Gatsby sites.
+* As we go through the presentation: We'll go deeper into what this means
+
+</Notes>
+
+---
+
+# Themes?
+
+* Token Swaps
+* CSS Zen Garden
+
+<Notes>
+
+* purely ui: aka "dark mode"
+* CSS stylesheet swap or "a new coat of paint"
+* Typically one theme. Functionality addition, configuration
+
+</Notes>
+
+---
+
+# Wordpress/Hugo/etc
+
+* Single Theme
+* Comes with a visual style
+* Adds Functionality
+
+<Notes>
+
+* One theme, installed by vendoring
+* Themes sometimes come with "visual packs"
+* Turn WP blog into ecommerce store
+
+</Notes>
+
+---
+
+# What are <sup>(Gatsby)</sup> Themes?
+## A new abstraction
+
+<Notes>
+
+* The next level of abstraction for building and maintaining Gatsby projects
+* Just as flexible as building a Gatsby site itself, while allowing us to
+  encapsulate that flexibility in a way that is easier to consume for our peers.
+
+</Notes>
+
+---
+
+# <sup>(Gatsby)</sup> Themes?
+
+* ~~Token Swaps~~
+* CSS Zen Garden<sup>++</sup>
+
+
+<Notes>
+
+* Token swaps mostly runtime. Can help set up the infra.
+* Levels up by introducing "component set swaps" via Component Shadowing.
+  - Instead of `divs`, replace Content-Specific components across your entire
+    site, like `PostListItem` 
+
+</Notes>
+
+---
+
+# WordPress/Hugo/etc <sup>++</sup>
+
+* ~~Single~~ Theme<sub>s</sub>
+* Comes with a visual style
+* ~~Adds~~ <sub>composes</sub> Functionality
+
+<Notes>
+
+Gatsby improves by providing:
+
+* Multiple themes, in multiple ways (parent/child & siblings)
+* Comes with an integrateable visual style
+* Lego block an ecommerce store *and* a separate blog theme
+
+</Notes>
+
+---
+
+# Why themes?
+
+* Ease of use & higher level abstractions
+
+---
+
+# Lifecycle & Action APIs
+
+* `onCreateNode`
+* `createPage`
+* `sourceNodes`
+* `createTypes`
+* `wrapRootElement`
+* etc...
+
+<Notes>
+
+* Gatsby already has a set of abstractions (Lifecycle & Action APIs -> source &
+  transformer plugins)
+
+</Notes>
+
+---
+
+# Issues
+
+* Plugins can't add plugins
+* Low level abstractions
+
+<Notes>
+
+* still writing `createPage`
+* building a higher level of abstraction
+  - write less gatsby-config/gatsby-node
+  - We want custom sized Lego blocks of functionality
+
+</Notes>
+
+---
+
+# Who are themes for?
+
+* People new to Gatsby
+* People with common use cases
+* Entrepreneurs
+* Designers
+
+<Notes>
+
+* People new to Gatsby that want to get started quickly without a difficult
+  learning curve
+* People who have clear and common use-cases in mind for Gatsby (e.g. blog,
+  ecommerce, documentation) and want to share the complexity of maintaining the
+  underlying functionality with others — so pick a theme as the base for their
+  site instead of starting from scratch 
+* OSS/Commercial entrepreneurs who want to create web products. Themes will
+  enable them to assemble a product they can share or sell with others. 
+* Designers who want to create unique/beautiful website designs to share with
+  others
+
+</Notes>
+
+---
+
+<TwitterTweetEmbed
+  tweetId={'1085279417151057920'}
+/>
+
+---
+
+# Use Cases
+
+1. I want a Blog
+2. Documentation and a Blog 
+3. Customize the branding
+4. Build Themes to sell
+5. Internal Create React App
+6. Data Sourcing
+
+<Notes>
+
+1. Just write some markdown and have a blog (`yarn add gatsby-theme-blog`)
+2. Just write some markdown and have docs/ a blog (`yarn add gatsby-theme-docz`)
+3. Change the tokens (colors, typography, etc)
+4. Shadow components for more customization
+  - a couple for own project
+  - a lot to produce a new theme
+5. Apollo (multiple documentation sites, etc)
+6. Abstract Data for public theme consumption
+  - `type BlogPost` can come from any data source
+
+</Notes>
+
+---
+# I want a Blog
+
+```shell
+yarn init -y
+yarn add gatsby-theme-blog
+```
+
+
+```js
+// gatsby-config.js
+module.exports = {
+  __experimentalThemes: [`gatsby-theme-blog`]
+}
+```
+
+<Notes>
+
+* read code
+* Explain __experimentalThemes
+
+</Notes>
+
+
+---
+
+
+# Docs and a Blog
+
+```shell
+yarn init -y
+yarn add gatsby-theme-blog gatsby-theme-docz
+```
+
+<Notes>
+
+* read code
+
+</Notes>
+
+---
+# Docs and a Blog
+
+```js
+// gatsby-config.js
+module.exports = {
+  __experimentalThemes: [
+    `gatsby-theme-blog`,
+    `gatsby-theme-docz`
+  ]
+}
+```
+
+<Notes>
+
+You can use multiple themes
+
+</Notes>
+
+---
+
+<FullScreenCode>
+
+```js
+// gatsby-config.js
+module.exports = {
+  __experimentalThemes: [{
+    resolve: `gatsby-theme-blog`,
+    options: {
+      colors: {
+        black: '#000e1a',
+        white: '#fff',
+        blue: '#007ce0',
+        navy: '#004175'
+      }
+    }
+  }]
+}
+```
+
+</FullScreenCode>
+<Notes>
+
+# Branding
+
+Themes accept options. Using styled-system? set theme
+
+</Notes>
+
+---
+
+# How do Themes work?
+
+* gatsby-config.js
+* Overrides and Configuration
+* Data
+
+<Notes>
+
+Themes boil down to `gatsby-config.js`.
+
+</Notes>
+
+---
+
+<FullScreenCode>
+
+```js
+// gatsby-config.js
+module.exports = {
+  plugins: [
+    `gatsby-plugin-mdx`,
+    `gatsby-plugin-emotion`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `src/pages/`,
+      },
+    },
+    `gatsby-source-airtable`,
+  ]
+}
+```
+
+</FullScreenCode>
+
+<Notes>
+
+* Heart of a Gatsby project.
+
+</Notes>
+
+---
+
+<FullScreenCode>
+
+```js
+// gatsby-config.js
+module.exports = {
+  __experimentalThemes: [`gatsby-theme-superawesome`],
+  plugins: [
+    `gatsby-source-airtable`,
+  ]
+}
+```
+
+</FullScreenCode>
+
+<Notes>
+
+* There's sharable logic, and one-off.
+* Airtable is only on this one site.
+* Every site is built with MDX and Emotion
+
+</Notes>
+
+---
+
+<FullScreenCode>
+
+```js
+// gatsby-theme-superawesome's gatsby-config.js
+module.exports = {
+  plugins: [
+    `gatsby-plugin-mdx`,
+    `gatsby-plugin-emotion`,
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `pages`,
+        path: `src/pages/`,
+      },
+    },
+  ]
+}
+```
+
+</FullScreenCode>
+
+<Notes>
+
+* congrats you just wrote your first theme
+* Everything else emerges from this idea of composing blocks of lower level APIs together.
+
+</Notes>
+
+---
+
+# Overrides and Configuration
+
+* Configuring Themes
+* Replacing components
+* Extending components
+
+<Notes>
+
+Not everything is perfect out of the box
+
+</Notes>
+
+---
+
+# Configurable Gatsby Config
+
+```
+// gatsby-config.js
+module.exports = {
+  __experimentalThemes: [{
+    resolve: `gatsby-theme-superblog`,
+    options: { tags: [`mdx`, `gatsby`, `pizza`] }
+  }]
+}
+```
+
+<Notes>
+
+* Configure a blog theme to do validation on specific tags
+
+</Notes>
+
+---
+
+<FullScreenCode>
+
+```
+// A theme's gatsby-config.js
+module.exports = options => {
+  const optionalPlugins = []
+
+  if(options.tags) {
+    optionalPlugins.push({
+      resolve: `gatsby-plugin-validate-blogpost`,
+      options: { tags: options.tags }
+    })
+  }
+
+  return {
+    plugins
+  }
+}
+```
+
+</FullScreenCode>
+
+
+<Notes>
+
+* gatsby configs can be a function for themes
+
+</Notes>
+
+---
+
+<FullScreenCode>
+
+```js
+// a theme's gatsby-node.js
+exports.sourceNodes = ({actions}, themeOptions) => {
+  actions.createTypes('enum Tag {'
+    + themeOptions.tags.join('\n')
+    + '}'
+  )
+}
+
+// the generated code
+enum Tag {
+  mdx
+  gatsby 
+  pizza
+}
+```
+
+</FullScreenCode>
+
+<Notes>
+
+* We can generate and use types that will break if we use the wrong values by
+  configuring it in our theme's usage
+
+</Notes>
+
+---
+
+```
+Expected a value of type "Tag" but received: "milk-duds"
+```
+
+<Notes>
+
+If we use the tag `milk-duds`, the GraphQL API gives us an error at build time.
+
+</Notes>
+
+---
+
+# Shadowing
+
+```
+.
+└── site
+    ├── gatsby-config.js
+    ├── package.json
+    ├── node_modules
+    │   └── gatsby-theme-superawesome
+    │       └── src
+    │           └── components
+    │               └── blog-post-item.js
+    └── src
+        └── gatsby-theme-superawesome
+            └── components
+                └── blog-post-item.js
+```
+
+<Notes>
+
+* Theme uses component `blog-post-item`
+* We don't like it, replace with our own
+* Shadowed component gets props as usual, is injected into the React tree in the
+  same spot as original component
+
+</Notes>
+
+---
+
+# Shadowing
+
+* Works for any webpack'd file in `src/`
+* Direct replacement of file
+
+<Notes>
+
+* gets same props, etc
+
+</Notes>
+
+---
+
+<FullScreenCode>
+
+```
+// this file is our shadow file in our site
+// site/src/gatsby-theme-superawesome/components/blog-post-item.js
+
+// import original component
+import BlogPostItem from 'gatsby-theme-superawesome/src/components/blog-post-item.js'
+
+// don't show excerpts
+export default props => (
+  <BlogPostItem {...props} excerpt="" />
+)
+```
+
+</FullScreenCode>
+
+<Notes>
+
+## Extending Components
+
+* This approach allows us to upgrade our theme without worrying about breaking as much
+
+</Notes>
+
+---
+
+# Latent Shadowing
+
+1. Multiple themes
+2. Shadowing
+3. Shadowing themes that could be installed
+
+<Notes>
+
+* Shadowing works in themes and sites
+* Gatsby allows multiple themes to be installed
+* A theme can add support for other themes by shadowing their files. These files
+  won't be used until the other theme is installed.
+
+</Notes>
+
+---
+
+# When all else fails
+
+* Low level APIs
+
+<Notes>
+
+* Can still use the low level APIs like `onCreatePage`
+
+</Notes>
+
+---
+
+# Themes Roadmap
+## and Other Projects
+
+* Data Abstraction
+* System UI
+* DesignQL
+* Theme UI
+* Blocks
+* CLI improvements
+
+---
+
+# Data Abstraction
+
+* Be able to use themes across sources
+* Builds on Schema Customization APIs
+* Is still early
+
+---
+
+# Warning: Experimental Ahead
+
+* Themes core is pretty stable
+* Shadowing is pretty stable
+* Data Abstractions are new
+* Everything I'm about to show you *beyond this slide* is not ready for production
+
+---
+
+# System UI
+
+* Design token format spec
+
+<Notes>
+
+* Meant to promote the interoperability of various tools around scale and value definitions
+* borne out of styled-system efforts originally
+
+</Notes>
+
+---
+
+# DesignQL
+
+* Reference implementation of System UI Spec
+* Generates Documentation
+* A base for future work
+
+<Notes>
+
+* generative design
+* experimenting with primitives
+* inline theme/component editing
+* Gatsby Themes can opt-in to this for first-class editor support
+
+</Notes>
+
+---
+
+# Theme UI
+
+* Component Library
+* Implements System UI/DesignQL standards
+* Will be used for Gatsby official themes
+* Currently used on gatsby-theme-digital-garden
+* Comes with solutions for scoping, documentation, etc
+
+---
+
+# Blocks
+
+* Open Source Block Editor
+* Backed by MDX, an authorable format
+* Partner with third parties (design tools, CMSs, etc)
+
+<Notes>
+
+Like: Notion, Dropbox Paper, Google Docs
+
+</Notes>
+
+---
+
+# CLI Improvements
+
+* Shadow ejection and introspection
+
+<Notes>
+
+Shadowing can be a lot to hold in your head when trying to figure out what can
+be shadowed and what currently is shadowed. We're working on CLI improvements to
+Gatsby to display information about shadowed components as well as make ejecting
+specific components easier.
+
+</Notes>
+
+---
+
+# Gatsby Themes
+
+* Composable gatsby-configs
+* Configurable and Shadowable
+* NPM installable
+* As modular or monolithic as you want
+
+---
+
+# Gatsby Themes
+
+A higher level of abstraction for Gatsby projects

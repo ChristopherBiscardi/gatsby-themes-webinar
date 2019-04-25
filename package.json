@@ -1,0 +1,15 @@
+{
+  "name": "gatsby-themes-webinar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "christopherbiscardi <chris@christopherbiscardi.com> (@chrisbiscardi)",
+  "license": "MIT",
+  "dependencies": {
+    "@mdx-deck/export": "^2.3.2",
+    "mdx-deck": "^2.3.2",
+    "react-twitter-embed": "^2.0.7"
+  },
+  "scripts": {
+    "start": "mdx-deck deck.mdx"
+  }
+}
