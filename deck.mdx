@@ -1,21 +1,66 @@
+import gatsbyTheme, {FullScreenCode, Section, SectionInverted, Main} from 'gatsby-mdx-theme'
 import future from '@mdx-deck/themes/base'
 import highlight from '@mdx-deck/themes/syntax-highlighter-prism'
 import { TwitterTweetEmbed } from 'react-twitter-embed'
-import {FullScreenCode, Horizontal} from 'mdx-deck/layouts'
 import { Notes } from 'mdx-deck'
 
+import theme from 'mdx-deck/themes'
+
+import { code, header } from 'gatsby-mdx-theme/es/fonts'
+import colors from 'gatsby-mdx-theme/es/colors'
+import codeTheme from 'gatsby-mdx-theme/es/gatsby-code-theme'
+
+
+export const gatsbyThemes = {
+  ...future,
+  font: header.join(','),
+  monospace: code.join(','),
+  transitionTimingFunction: 'linear',
+  transitionDuration: '0s',
+  colors: {
+    background: 'white',
+    heading: colors.gatsby
+  },
+  blockquote: {
+    color: colors.gatsby,
+    paddingLeft: '2rem',
+    borderLeft: `5px solid ${colors.gatsby}`
+  },
+  paragraph: {
+    color: colors.gatsby
+  },
+  li: {
+    color: colors.gatsby
+  },
+  prism: {
+    style: codeTheme
+  }
+}
+
 export const themes = [
-  future,
+gatsbyTheme,
+  //future,
   {pre: {fontSize: '32px'}},
-  highlight
+  highlight,
 ]
+
+
+<Section>
+<div>
 
 # Gatsby Themes
 ## Better, Faster, Flexible-er
 
+</div>
+</Section>
+
 ---
 
+<SectionInverted>
+
 # What are Themes?
+
+</SectionInverted>
 
 <Notes>
 
@@ -59,8 +104,14 @@ export const themes = [
 
 ---
 
+<Section>
+<div>
+
 # What are <sup>(Gatsby)</sup> Themes?
 ## A new abstraction
+
+</div>
+</Section>
 
 <Notes>
 
@@ -107,9 +158,15 @@ Gatsby improves by providing:
 
 ---
 
+<Section>
+<div>
+
 # Why themes?
 
 * Ease of use & higher level abstractions
+
+</div>
+</Section>
 
 ---
 
@@ -545,7 +602,8 @@ If we use the tag `milk-duds`, the GraphQL API gives us an error at build time.
 // site/src/gatsby-theme-superawesome/components/blog-post-item.js
 
 // import original component
-import BlogPostItem from 'gatsby-theme-superawesome/src/components/blog-post-item.js'
+import BlogPostItem from
+'gatsby-theme-superawesome/src/components/blog-post-item.js'
 
 // don't show excerpts
 export default props => (
@@ -594,6 +652,9 @@ export default props => (
 
 ---
 
+<Section>
+<div>
+
 # Themes Roadmap
 ## and Other Projects
 
@@ -603,6 +664,9 @@ export default props => (
 * Theme UI
 * Blocks
 * CLI improvements
+
+</div>
+</Section>
 
 ---
 
@@ -692,6 +756,9 @@ specific components easier.
 
 ---
 
+<Section>
+<div>
+
 # Gatsby Themes
 
 * Composable gatsby-configs
@@ -699,8 +766,17 @@ specific components easier.
 * NPM installable
 * As modular or monolithic as you want
 
+</div>
+</Section>
+
 ---
+
+<SectionInverted>
+<div>
 
 # Gatsby Themes
 
 A higher level of abstraction for Gatsby projects
+
+</div>
+</SectionInverted>
